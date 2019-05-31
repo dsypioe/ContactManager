@@ -1,0 +1,139 @@
+
+
+<!doctype html><html lang="en"><head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="js/code.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
+<script>
+//$(document).ready(updateLoginAndUserId());
+
+$(document).ready(function() { 
+
+updateLoginAndUserId();
+
+initTable();
+
+/*
+setInterval( function () {
+    table.clear()
+    table.rows.add(dataArray);
+    table.draw(null, false); // user paging is not reset on reload
+      //table.ajax.reload( null, false );
+}, 1000 );
+*/
+
+    table1.on('click','tr', function(){
+        var data = $('#example').DataTable().row(this).data();
+        getFullContactInfo(data);
+        //$('#example').DataTable().row(this).data();
+        //$('#example').ajax.reload();
+    });
+    
+
+    /*
+    $('#example').on('click', 'tr', function()
+	{
+		getContacts();
+	}
+	*/
+
+} );
+
+</script>
+			
+				
+<title></title>
+</head>
+<!--<body onload = "updateLoginAndUserId();">-->
+<h1></h1>
+				
+<section class="container-fluid">
+<section class="row justify-content-center">
+<br><br>
+
+<span id="loginNameText"></span>
+<span id="testData"></span>
+
+<br><br>
+</section>
+</section>
+<div class="container">
+<!-- Modal for add contact -->
+<div class="modal" id="addModal">
+<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h2 class="modal-title">Add New Contact</h2>
+						<button class="close" type="button" data-dismiss="modal">x</button>
+					</div>
+					<div class="modal-body">
+						<p>First Name:<p><input type="username" class="form-control" id="firstText" placeholder="John">
+						<p>Last Name:<p><input type="username" class="form-control" id="lastText" placeholder="Doe">
+						<p>Email:<p><input type="username" class="form-control" id="emailText" placeholder="example@example.com">
+						<p>Phone number:<p><input type="username" class="form-control" id="phoneText" placeholder="1234567890">
+						<p>Address:<p><input type="username" class="form-control" id="addressText" placeholder="123 Name St.">
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary" onclick="addContact();" data-toggle="modal" data-target="#addModal">Save Contact</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Modal for edit contact -->
+		<div class="modal" id="editModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h2 class="modal-title">Edit Contact</h2>
+						<button class="close" type="button" data-dismiss="modal">x</button>
+					</div>
+					<div class="modal-body">
+						<p>First Name:<p><input type="username" class="form-control" id="newFirstText" value="">
+						<p>Last Name:<p><input type="username" class="form-control" id="newLastText" value="">
+						<p>Email:<p><input type="username" class="form-control" id="newEmailText" value="">
+						<p>Phone number:<p><input type="username" class="form-control" id="newPhoneText" value="">
+						<p>Address:<p><input type="username" class="form-control" id="newAddressText" value="">
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary" onclick="deleteContact();">Delete contact</button>
+                        <button type="submit" class="btn btn-primary" onclick="updateContact();">Save changes</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+	<div class="col">
+<div class="form-group">
+<!-- toggles the modal to add a new contact -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add contact</button>
+<!-- This button should open or make visible the add contact form. -->
+
+</div>
+<button type="submit" class="btn btn-primary" onclick="logoutUser();">Log out</button>
+</div>
+<div class="col-5">
+<table id="example" class="display" width="100%"></table>
+
+<table id="example" class="display" width="100%"></table>
+</div>
+<div class="col">
+</div>
+</div>
+</div>
+</body>
+</html>
+
+
