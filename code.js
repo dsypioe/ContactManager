@@ -24,7 +24,7 @@ function initTable()
     data: dataArray,
    
      "columnDefs": [
-    { "visible": false, "targets": 2  },
+    { "visible": false, "targets": 2 },
     { "visible": false, "targets": 3  },
     { "visible": false, "targets": 4  },
     { "visible": false, "targets": 5  }
@@ -32,14 +32,15 @@ function initTable()
   ],
    
         columns : [
-            { title : "Last"    },
             { title : "First"   },
+            { title : "Last"    },
             { title : "phone"   },
             { title : "id"      },
             { title : "email"   },
             { title : "address" }
            
-        ]
+        ],
+		searching : false,
 
     } );
 }
@@ -203,7 +204,7 @@ function updateContact()
 // For example, this is the data for the first contact in alphabetical order:
 // contact 0 (first in alphabetical order)
 // _____________________________________________________________________________________   
-// | last               | first              | phone              | id (auto increment) |
+// | first              | last               | phone              | id (auto increment) |
 // | jsonContacts[0][0] | jsonContacts[0][1] | jsonContacts[0][2] | jsonContacts[0][3]  |
 // |____________________|____________________|____________________|_____________________|
 function getContacts()
@@ -228,36 +229,7 @@ function getContacts()
 
 	    // Receive json response, including info for all contacts.
 		jsonContacts = JSON.parse( xhr.responseText );
-
-	    // *** put this in a function ***
-        for(i = 0; i < Object.keys(jsonContacts).length; i++)
-        {
-            dataArray[i] = jsonContacts[i];
-        }
-   
-        // deletes error contact entry
-        if(dataArray[0][0] === "_NO_CONTACTS_ERROR_")
-        {
-            dataArray.shift();
-        }
-
-        // *** This was an attempt to get the data table to update without refreshing the page, but it didn't work ***
-        //var table = $('#example').DataTable();
-    
-        //$('#example').DataTable.clear().rows.add(dataArray).draw();
-        //$('#example').DataTable.rows.add(dataArray);
-        //$('#example').DataTable.draw();
-        //$('#example').ajax.reload();
-        //$('#example').DataTable.draw();
-
-table1.clear();
-    table1.rows.add(dataArray);
-    table1.draw();
-    //table.draw(null, false); // user paging is not reset on reload
-
-        //table.clear();
-        //table.rows.add(dataArray);
-        //table.draw();
+		refreshTable();        
 	}
 	catch(err)
 	{
@@ -276,23 +248,48 @@ function createTable()
     } );
 }
 
+function refreshTable()
+{
+	var i;
+	for(i = 0; i < Object.keys(jsonContacts).length; i++)
+	{
+		dataArray[i] = jsonContacts[i];
+	}
+        
+	// prevent last element from duplicating after a contact is deleted
+	while(Object.keys(dataArray).length > Object.keys(jsonContacts).length)
+	{
+		dataArray.pop();
+	}
+   
+	// deletes error contact entry
+	if(dataArray[0][0] === "_NO_CONTACTS_ERROR_")
+	{
+		dataArray.shift();
+	}
+  
+	table1.clear();
+    table1.rows.add(dataArray);
+    table1.draw();  
+}
+
 // Gets all info for a contact using the json index, not id value.
 // This function is mostly for testing.
 // The full contact info is available in the jsonContacts:
 // ________________________________________________________________________________________________________________________________
-// | last               | first              | phone              | id (auto increment) | email              | address            |
+// | first              | last               | phone              | id (auto increment) | email              | address            |
 // | jsonContacts[0][0] | jsonContacts[0][1] | jsonContacts[0][2] | jsonContacts[0][3]  | jsonContacts[0][4] | jsonContacts[0][5] |
 // |____________________|____________________|____________________|_____________________|____________________|____________________|
 function getFullContactInfo(data)
 {
-    document.getElementById("newLastText").innerHTML    = data[0];
-    document.getElementById("newFirstText").innerHTML   = data[1];
+    document.getElementById("newFirstText").innerHTML    = data[0];
+    document.getElementById("newLastText").innerHTML   = data[1];
     document.getElementById("newPhoneText").innerHTML   = data[2];
     document.getElementById("newEmailText").innerHTML   = data[4];
     document.getElementById("newAddressText").innerHTML = data[5];
 
-    $('#newLastText').val(data[0]);
-    $('#newFirstText').val(data[1]);
+    $('#newFirstText').val(data[0]);
+    $('#newLastText').val(data[1]);
     $('#newPhoneText').val(data[2]);
     $('#newEmailText').val(data[4]);
     $('#newAddressText').val(data[5]);
@@ -300,8 +297,6 @@ function getFullContactInfo(data)
     contactId = data[3];
     
     $("#editModal").modal();
-    
-    //document.getElementById("editModal").style.display = "block";
 }
 
 // logs out user and sends them to the index page
@@ -393,6 +388,21 @@ function addUser()
 	}
 }
 
+function clearContactFields()
+{
+    document.getElementById("lastText").value = "";
+    document.getElementById("firstText").value = "";
+    document.getElementById("emailText").value = "";
+    document.getElementById("phoneText").value = "";
+	document.getElementById("addressText").value = "";
+
+    document.getElementById("lastText").innerHTML = "";
+    document.getElementById("firstText").innerHTML = "";
+    document.getElementById("emailText").innerHTML = "";
+    document.getElementById("phoneText").innerHTML = "";
+	document.getElementById("addressText").innerHTML = "";
+}
+
 // creates a new contact
 function addContact()
 {
@@ -434,15 +444,13 @@ function addContact()
 
 // This function searches for contacts with matches based on an input string.
 // It updates jsonContacts with the contacts with matching "first" rows.
-function searchContactsByFirst()
-{
-//    document.getElementById("searchContactsByFirstStatus").innerHTML = "";
-	
-    var firstKey = document.getElementById("firstSearchText").value.trim();
+function searchContacts()
+{	
+    key = document.getElementById("searchText").value.trim();
 	
 	// login-data json that interfaces with php / api
-	var jsonPayload = '{"id" : ' + userId + ', "first" : "' + firstKey + '"}';
-	var url = apiUrl + '/searchContactsByFirst' + dotPhp;
+	var jsonPayload = '{"id" : ' + userId + ', "key" : "' + key + '"}';
+	var url = apiUrl + '/searchContacts' + dotPhp;
 	
 	// http POST : Attempt to send json with id and key infomation to server.
 	var xhr = new XMLHttpRequest();
@@ -454,52 +462,14 @@ function searchContactsByFirst()
 
 	    // Receive json response, including autoincrement user key (id) value.	
 		jsonContacts = JSON.parse( xhr.responseText );
-
-		document.getElementById("searchContactsByFirstStatus").innerHTML = "Matching contact(s) retrieved.";	    
-
-        // These two lines are for testing and debugging only.
-		var jsonStr = JSON.stringify(jsonContacts);
-		document.getElementById("searchContactsByFirstStatus").innerHTML = jsonStr;
+		refreshTable();
 	}
 	catch(err)
 	{
-		document.getElementById("searchContactsByFirstStatus").innerHTML = err.message;
-	}
-}
-
-// This function searches for contacts with matches based on an input string.
-// It updates jsonContacts with the contacts with matching "last" rows.
-function searchContactsByLast()
-{
-    document.getElementById("searchContactsByLastStatus").innerHTML = "";
-	
-    var lastKey = document.getElementById("lastSearchText").value.trim();
-	
-	// login-data json that interfaces with php / api
-	var jsonPayload = '{"id" : ' + userId + ', "last" : "' + lastKey + '"}';
-	var url = apiUrl + '/searchContactsByLast' + dotPhp;
-	
-	// http POST : Attempt to send json with login data to server.
-	var xhr = new XMLHttpRequest();
-	xhr.open("POST", url, false);
-	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-	try
-	{
-		xhr.send(jsonPayload);
-
-	    // Receive json response, including autoincrement user key (id) value.	
-		jsonContacts = JSON.parse( xhr.responseText );
-
-		document.getElementById("searchContactsByLastStatus").innerHTML = "Matching contact(s) retrieved.";
-		
-        // These two lines are for testing and debugging only.
-		var jsonStr = JSON.stringify(jsonContacts);
-		document.getElementById("searchContactsByLastStatus").innerHTML = jsonStr;
-	}
-	catch(err)
-	{
-		document.getElementById("searchContactsByLastStatus").innerHTML = err.message;
-	}
+        // *** add error handler ***
+	}	
+	document.getElementById("searchText").innerHTML = "";
+    document.getElementById("searchText").value = "";
 }
 
 // Delete contact with corresponding id.
@@ -521,28 +491,14 @@ function deleteContact()
 		{
 			if (this.readyState == 4 && this.status == 200) 
 			{
-                getContacts();
                 $("#editModal").modal('hide');
 			}
 		};
 		xhr.send(jsonPayload);
+        getContacts(); // *** This is bad because it doesn't wait for a response from the server ***
 	}
 	catch(err)
 	{
         // *** add error handler ***
 	}
 }
-
-function hideElement(elementId)
-{
-    document.getElementById( elementId ).style.visibility = "hidden";
-	document.getElementById( elementId ).style.display = "none";
-}
-
-function showElement(elementId)
-{
-    document.getElementById( elementId ).style.visibility = "visible";
-    //document.getElementById( elementId ).class = show;
-	document.getElementById( elementId ).style.display = "block";
-}
-
