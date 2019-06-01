@@ -15,7 +15,7 @@
     // connects to database and retrieves data (last, first, phone, id)
 	//$conn = new mysqli("localhost", "*** USER NAME ***", "*** PASSWORD ***", "*** DATABASE ***");
 	
-	$conn = new mysqli("localhost", "cont8774_Jonas", "100smoke001", "cont8774_user_database");
+	$conn = new mysqli("localhost", "*** USER NAME ***", "*** PASSWORD ***", "*** DATABASE ***");
 	if ($conn->connect_error) 
 	{
 		returnWithError( $conn->connect_error );
