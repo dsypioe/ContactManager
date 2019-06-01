@@ -309,8 +309,7 @@ function logoutUser()
 
 // returns true if user has an account and false otherwise
 function isExistingUser(loginString)
-{
-    
+{    
     var jsonPayload = '{"login" : "' + loginString + '"}';
 	var url = apiUrl + '/isExistingUser' + dotPhp;
     var userStatus;
