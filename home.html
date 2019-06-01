@@ -1,8 +1,8 @@
-
-
-<!doctype html><html lang="en"><head>
+<!DOCTYPE html>
+<!-- saved from url=(0038)http://contactmanager.online/home.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <!-- Required meta tags -->
-<meta charset="utf-8">
+
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
@@ -15,125 +15,131 @@
 	<script type="text/javascript" src="js/code.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/ContactManagerHomeStyle.css">
+    <link rel="stylesheet" href="css/homeStyle.css">
+
 
 <script>
-//$(document).ready(updateLoginAndUserId());
 
-$(document).ready(function() { 
-
-updateLoginAndUserId();
-
-initTable();
-
-/*
-setInterval( function () {
-    table.clear()
-    table.rows.add(dataArray);
-    table.draw(null, false); // user paging is not reset on reload
-      //table.ajax.reload( null, false );
-}, 1000 );
-*/
-
-    table1.on('click','tr', function(){
+$(document).ready(function() 
+{ 
+    updateLoginAndUserId();
+    initTable();
+    table1.on('click','tr', function()
+    {
         var data = $('#example').DataTable().row(this).data();
         getFullContactInfo(data);
-        //$('#example').DataTable().row(this).data();
-        //$('#example').ajax.reload();
     });
-    
-
-    /*
-    $('#example').on('click', 'tr', function()
-	{
-		getContacts();
-	}
-	*/
-
-} );
+});
 
 </script>
-			
-				
+
 <title></title>
 </head>
 <!--<body onload = "updateLoginAndUserId();">-->
-<h1></h1>
-				
-<section class="container-fluid">
-<section class="row justify-content-center">
-<br><br>
+<body>
 
-<span id="loginNameText"></span>
-<span id="testData"></span>
 
-<br><br>
-</section>
-</section>
-<div class="container">
-<!-- Modal for add contact -->
-<div class="modal" id="addModal">
-<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h2 class="modal-title">Add New Contact</h2>
-						<button class="close" type="button" data-dismiss="modal">x</button>
-					</div>
-					<div class="modal-body">
-						<p>First Name:<p><input type="username" class="form-control" id="firstText" placeholder="John">
-						<p>Last Name:<p><input type="username" class="form-control" id="lastText" placeholder="Doe">
-						<p>Email:<p><input type="username" class="form-control" id="emailText" placeholder="example@example.com">
-						<p>Phone number:<p><input type="username" class="form-control" id="phoneText" placeholder="1234567890">
-						<p>Address:<p><input type="username" class="form-control" id="addressText" placeholder="123 Name St.">
-					</div>
-					<div class="modal-footer">
-						<button type="submit" class="btn btn-primary" onclick="addContact();" data-toggle="modal" data-target="#addModal">Save Contact</button>
-					</div>
-				</div>
-			</div>
-		</div>
+<ul>
+  <h>   Welcome to Contact Manager Online </h>
+  <!-- Button to logout -->
+  <button type="submit" class="btn btn-primary" style="float:right;" onclick="logoutUser();">Log Out</button>
+  <user>
+	<!-- id="loginNameText" -->
+	<p>Logged in as </p>
+	<p1 id="loginNameText"></p1>
+  </user>
+</ul>
 
-		<!-- Modal for edit contact -->
-		<div class="modal" id="editModal">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h2 class="modal-title">Edit Contact</h2>
-						<button class="close" type="button" data-dismiss="modal">x</button>
-					</div>
-					<div class="modal-body">
-						<p>First Name:<p><input type="username" class="form-control" id="newFirstText" value="">
-						<p>Last Name:<p><input type="username" class="form-control" id="newLastText" value="">
-						<p>Email:<p><input type="username" class="form-control" id="newEmailText" value="">
-						<p>Phone number:<p><input type="username" class="form-control" id="newPhoneText" value="">
-						<p>Address:<p><input type="username" class="form-control" id="newAddressText" value="">
-					</div>
-					<div class="modal-footer">
-						<button type="submit" class="btn btn-primary" onclick="deleteContact();">Delete contact</button>
-                        <button type="submit" class="btn btn-primary" onclick="updateContact();">Save changes</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-	<div class="col">
-<div class="form-group">
-<!-- toggles the modal to add a new contact -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add contact</button>
-<!-- This button should open or make visible the add contact form. -->
+<div class="container-fluid" style="padding:50px">
+    <!-- Modal for add contact -->
+    <div class="modal" id="addModal" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Add New Contact</h2>
+                    <button class="close" type="button" data-dismiss="modal">X</button>
+                </div>
+                <div class="modal-body">
+                    <p>First Name:</p><p><input type="username" class="form-control" id="firstText" placeholder="John">
+                    </p><p>Last Name:</p><p><input type="username" class="form-control" id="lastText" placeholder="Doe">
+                    </p><p>Email:</p><p><input type="username" class="form-control" id="emailText" placeholder="example@example.com">
+                    </p><p>Phone number:</p><p><input type="username" class="form-control" id="phoneText" placeholder="(123) 456-7890">
+                    </p><p>Address:</p><p><input type="username" class="form-control" id="addressText" placeholder="123 Name St.">
+                </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" onclick="addContact();" data-toggle="modal" data-target="#addModal">Save Contact</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Modal for contact info/edit contact -->
+    <div class="modal" id="editModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Contact Info - Click Fields to Edit</h3><!-- h2 -->
+                    <!--<h5 class="modal-title">Click Fields to Edit</h5>-->
+                    <button class="close" type="button" data-dismiss="modal">X</button>
+                </div>
+                <div class="modal-body">
+                    <p>First Name:</p><p><input type="username" class="form-control" id="newFirstText" value="">
+                    </p><p>Last Name:</p><p><input type="username" class="form-control" id="newLastText" value="">
+                    </p><p>Email:</p><p><input type="username" class="form-control" id="newEmailText" value="">
+                    </p><p>Phone number:</p><p><input type="username" class="form-control" id="newPhoneText" value="">
+                    </p><p>Address:</p><p><input type="username" class="form-control" id="newAddressText" value="">
+                </p></div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" onclick="deleteContact();">Delete contact</button>
+                    <button type="submit" class="btn btn-primary" onclick="updateContact();">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col"></div>
+
+  <div class="col-1">
+            <div class="form-group">
+                <!-- toggles the modal to add a new contact -->
+                <button type="button" style="float:right" class="btn btn-primary" onclick="clearContactFields();" data-toggle="modal" data-target="#addModal">Add contact</button>
+                <!-- This button should open or make visible the add contact form. -->
+
+
+                <input type="username" style="float:right" class="form-control" id="searchText" placeholder="search">
+                <button type="button"  style="float:right" class="btn btn-primary" onclick="searchContacts();" >Search</button>
+                <button type="button"  style="float:right" class="btn btn-primary" onclick="getContacts();" >Get all contacts</button>
+
+            </div>
+        </div>
+
+        <div class="box">
+        <div class="col-">
+            <div id="example_wrapper" class="dataTables_wrapper no-footer">
+                
+                <table id="example" class="display dataTable no-footer" width="100%" role="grid" aria-describedby="example_info" style="width: 100%;">
+                    
+                </table>
+                
+            </div>
+
+            <table id="example" class="display" width="100%"></table>
+
+            </div>
+        </div>
+
+        <div class="col">
+        </div>
+
+
+    </div>
 </div>
-<button type="submit" class="btn btn-primary" onclick="logoutUser();">Log out</button>
-</div>
-<div class="col-5">
-<table id="example" class="display" width="100%"></table>
-
-<table id="example" class="display" width="100%"></table>
-</div>
-<div class="col">
-</div>
-</div>
-</div>
-</body>
-</html>
 
 
+
+
+</body></html>
