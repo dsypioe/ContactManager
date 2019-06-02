@@ -1,6 +1,5 @@
 /*
-A note from Jonas:
-    This is still a work in progress. I have over commented a bit, just to be on the safe side.
+A note from Jonas:    
     All comments about things that need to be changed will begin and end with three asterisks ***.
 */
 
