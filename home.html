@@ -25,9 +25,9 @@ $(document).ready(function()
 { 
     updateLoginAndUserId();
     initTable();
-    table1.on('click','tr', function()
+    contactsTable.on('click','tr', function()
     {
-        var data = $('#example').DataTable().row(this).data();
+        var data = $('#contacts').DataTable().row(this).data();
         getFullContactInfo(data);
     });
 });
@@ -47,7 +47,7 @@ $(document).ready(function()
   <user>
 	<!-- id="loginNameText" -->
 	<p>Logged in as </p>
-	<p1 id="loginNameText"></p1>
+	<p1 id="userLogin"></p1>
   </user>
 </ul>
 
@@ -105,29 +105,40 @@ $(document).ready(function()
 
   <div class="col-1">
             <div class="form-group">
+            <div id="custom-search-input">
+                <div class="input-group col-md-12">
+                <input type="text" class="search-query form-control" id="searchText" placeholder="search" />
+                    <span class = "input-group-btn">
+                        <button type="button" class="btn btn-primary" onclick="searchContacts();">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>     
+                
+                <!-- This span is for debugging -->
+                <p>Logged in as <span style="color:black" id="userLogin"></span></p>
+                <!-- This span is for debugging -->
+                
+                <button type="button"  style="float:right" class="btn btn-primary" onclick="getContacts();" >Get all contacts</button>
                 <!-- toggles the modal to add a new contact -->
                 <button type="button" style="float:right" class="btn btn-primary" onclick="clearContactFields();" data-toggle="modal" data-target="#addModal">Add contact</button>
                 <!-- This button should open or make visible the add contact form. -->
-
-
-                <input type="username" style="float:right" class="form-control" id="searchText" placeholder="search">
-                <button type="button"  style="float:right" class="btn btn-primary" onclick="searchContacts();" >Search</button>
-                <button type="button"  style="float:right" class="btn btn-primary" onclick="getContacts();" >Get all contacts</button>
 
             </div>
         </div>
 
         <div class="box">
         <div class="col-">
-            <div id="example_wrapper" class="dataTables_wrapper no-footer">
+            <div id="contacts_wrapper" class="dataTables_wrapper no-footer">
                 
-                <table id="example" class="display dataTable no-footer" width="100%" role="grid" aria-describedby="example_info" style="width: 100%;">
-                    
+                <table id="contacts" class="display dataTable no-footer" width="100%" role="grid" aria-describedby="contacts_info" style="width: 100%;">
+
                 </table>
                 
             </div>
 
-            <table id="example" class="display" width="100%"></table>
+            <table id="contacts" class="display" width="100%"></table>
 
             </div>
         </div>
