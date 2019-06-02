@@ -1,9 +1,7 @@
 /*
-
 A note from Jonas:
     This is still a work in progress. I have over commented a bit, just to be on the safe side.
     All comments about things that need to be changed will begin and end with three asterisks ***.
-
 */
 
 var apiUrl  = "http://contactmanager.online/php";
@@ -16,14 +14,16 @@ var jsonContacts = "";
 var dataArray = [["","","","","",""]]; // stores data for data table
 var contactId = 0;
 
-var table1;
+var contactsTable;
 
 function initTable()
 {
-    table1 = $('#example').DataTable( {
+    contactsTable = $('#contacts').DataTable( {
     data: dataArray,
    
      "columnDefs": [
+    //{ "width": "50%", "targets": 0 },    
+    //{ "width": "50%", "targets": 1 },         
     { "visible": false, "targets": 2 },
     { "visible": false, "targets": 3  },
     { "visible": false, "targets": 4  },
@@ -41,6 +41,8 @@ function initTable()
            
         ],
 		searching : false,
+        //"autoWidth": false,
+        
 
     } );
 }
@@ -51,8 +53,9 @@ function updateLoginAndUserId()
 {
     // Get the session data (id and login) that was saved from the login page.
     readSession();
-    document.getElementById("loginNameText").innerHTML = login;
-    
+
+    document.getElementById("userLogin").innerHTML = login;
+
     // Send the user to the index page if they try to access the home page without logging in.
     if(userId === 0)
         window.location.href = rootUrl + '/index.html', true;
@@ -105,10 +108,13 @@ function loginUser()
 		document.getElementById("loginNameText").value = "";
 		document.getElementById("loginPasswordText").value = "";
 
-		login = "write session";
+		//login = "write session";
     
         // Save the session data (id and login) so it can be retrieved when home is loaded.
         writeSession();		
+		
+        //document.getElementById("loginNameText").value = "";
+		//document.getElementById("loginPasswordText").value = "";
 		
 		// Load home page.
 		window.location.href = rootUrl + '/home.html', true;
@@ -123,6 +129,7 @@ function loginUser()
 
 function writeSession()
 {
+    //login = "write";
 	var jsonPayload = '{"login" : "' + login + '", "id" : "' + userId + '"}'; // *** convert userId to string first? ***
 	var url = apiUrl + '/writeSession' + dotPhp;
 
@@ -161,6 +168,7 @@ function readSession()
 		
 		// *** problem here: login string is not being written to jsonObject.login.
 		login = jsonObject.login;//JSON.stringify(jsonObject.login);
+		//login = JSON.stringify(login);
 	}
 	catch(err)
 	{
@@ -177,6 +185,11 @@ function updateContact()
     var email = document.getElementById("newEmailText").value.trim();
     var phone = document.getElementById("newPhoneText").value.trim();
     var address = document.getElementById("newAddressText").value.trim();
+
+    while(phone.length > 13)
+    {
+        phone = phone.substring(0, phone.length - 1);
+    }
 
 	// login-data json that interfaces with php / api
 	var jsonPayload = '{"id" : "' + id + '", "last" : "' + last + '", "first" : "' + first + '", "email" : "' + email + '", "phone" : "' + phone + '", "address" : "' + address + '"}';
@@ -209,6 +222,9 @@ function updateContact()
 // |____________________|____________________|____________________|_____________________|
 function getContacts()
 {
+    //document.getElementById("userLogin").innerHTML = login;
+    
+    //document.getElementById("loginNameText").innerHTML = login;
     // Don't retrieve contacts if user is logged out.
 	if(userId === 0)
 	{
@@ -239,7 +255,7 @@ function getContacts()
 
 function createTable()
 {
-     $('#contactsTable').DataTable( {
+     $('#contacts').DataTable( {
         data: dataArray,
         columns : [
             { title : "Last" },
@@ -251,12 +267,19 @@ function createTable()
 function refreshTable()
 {
 	var i;
+	
+	// clear all entries out of table
+	while(Object.keys(dataArray).length > 0)
+	{
+		dataArray.pop();
+	}
+	
 	for(i = 0; i < Object.keys(jsonContacts).length; i++)
 	{
 		dataArray[i] = jsonContacts[i];
 	}
         
-	// prevent last element from duplicating after a contact is deleted
+	// prevent last element from duplicating after a contact is deleted *** no longer needed because all entries are cleared first ***
 	while(Object.keys(dataArray).length > Object.keys(jsonContacts).length)
 	{
 		dataArray.pop();
@@ -268,9 +291,9 @@ function refreshTable()
 		dataArray.shift();
 	}
   
-	table1.clear();
-    table1.rows.add(dataArray);
-    table1.draw();  
+	contactsTable.clear();
+    contactsTable.rows.add(dataArray);
+    contactsTable.draw();  
 }
 
 // Gets all info for a contact using the json index, not id value.
@@ -415,7 +438,7 @@ function addContact()
 	var address = document.getElementById("addressText").value.trim();
 
 	// contact-data json that interfaces with php / api
-	var jsonPayload = '{"last" : "' + last + '","first" : "' + first + '", "email" : "' + email + '", "phone" : ' + phone + ', "address" : "' + address + '", "userId" : ' + userId + '}';
+	var jsonPayload = '{"last" : "' + last + '","first" : "' + first + '", "email" : "' + email + '", "phone" : "' + phone + '", "address" : "' + address + '", "userId" : ' + userId + '}';
 	var url = apiUrl + '/addContact' + dotPhp;
 
 	// http POST : Attempt to send json with new-contact data to server.		
@@ -445,6 +468,8 @@ function addContact()
 // It updates jsonContacts with the contacts with matching "first" rows.
 function searchContacts()
 {	
+        // *** This is for debugging ***
+        //document.getElementById("userLogin").innerHTML = login;
     key = document.getElementById("searchText").value.trim();
 	
 	// login-data json that interfaces with php / api
@@ -494,10 +519,18 @@ function deleteContact()
 			}
 		};
 		xhr.send(jsonPayload);
-        getContacts(); // *** This is bad because it doesn't wait for a response from the server ***
+        var jsonObject = JSON.parse( xhr.responseText ); // This data is not used.
 	}
 	catch(err)
 	{
         // *** add error handler ***
 	}
+	
+    setTimeout(function(){
+        getContacts();
+        refreshTable();
+    }, 1000);
+
 }
+
+
