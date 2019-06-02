@@ -522,19 +522,6 @@ function deleteContact()
         getContacts();
         refreshTable();
     }, 1000);
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
