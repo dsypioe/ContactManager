@@ -12,10 +12,8 @@
 	$errorArray = array();
 	$errorArray[] = array("_NO_CONTACTS_ERROR_", "No contacts found.", "", 0,"","");
 	
-    // connects to database and retrieves data (last, first, phone, id)
-	//$conn = new mysqli("localhost", "*** USER NAME ***", "*** PASSWORD ***", "*** DATABASE ***");
-	
-	$conn = new mysqli("localhost", "cont8774_Jonas", "100smoke001", "cont8774_user_database");
+	// connects to database and retrieves data (last, first, phone, id)
+	$conn = new mysqli("localhost", "*** USER NAME ***", "*** PASSWORD ***", "*** DATABASE ***");	
 	if ($conn->connect_error) 
 	{
 		returnWithError( $conn->connect_error );
