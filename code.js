@@ -176,10 +176,10 @@ function updateContact()
 	var address = document.getElementById("newAddressText").value.trim();
 	
 	// truncate phone number string if it is longer than 13 characters
-    while(phone.length > 13)
-    {
-        phone = phone.substring(0, phone.length - 1);
-    }
+	while(phone.length > 13)
+	{
+		phone = phone.substring(0, phone.length - 1);
+	}
 
 	// login-data json that interfaces with php / api
 	var jsonPayload = '{"id" : "' + id + '", "last" : "' + last + '", "first" : "' + first + '", "email" : "' + email + '", "phone" : "' + phone + '", "address" : "' + address + '"}';
@@ -192,13 +192,13 @@ function updateContact()
 	try
 	{
 		xhr.send(jsonPayload);
-        // updates local (client-side) contacts data
-        getContacts();
-        $("#editModal").modal('hide');
+		// updates local (client-side) contacts data
+		getContacts();
+		$("#editModal").modal('hide');
 	}
 	catch(err)
 	{
-        // *** add error handler ***
+		// *** add error handler ***
 	}
 }
 
@@ -212,7 +212,7 @@ function updateContact()
 // |____________________|____________________|____________________|_____________________|
 function getContacts()
 {
-    // Don't retrieve contacts if user is logged out.
+	// Don't retrieve contacts if user is logged out.
 	if(userId === 0)
 	{
 	    return;
@@ -230,13 +230,13 @@ function getContacts()
 	{
 		xhr.send(jsonPayload);
 
-	    // Receive json response, including info for all contacts.
+		// Receive json response, including info for all contacts.
 		jsonContacts = JSON.parse( xhr.responseText );
 		refreshTable();        
 	}
 	catch(err)
 	{
-        // *** add error handler ***
+		// *** add error handler ***
 	}
 }
 
@@ -284,8 +284,8 @@ function refreshTable()
   	
 	// add contact info from array to datatable
 	contactsTable.clear();
-    contactsTable.rows.add(dataArray);
-    contactsTable.draw();  
+	contactsTable.rows.add(dataArray);
+	contactsTable.draw();  
 }
 
 // Gets all info for a contact using the json index, not id value.
@@ -319,15 +319,15 @@ function logoutUser()
 {
 	userId = 0;
 	login = "";
-    window.location.href = rootUrl + '/index.html', true;
+	window.location.href = rootUrl + '/index.html', true;
 }
 
 // returns true if user has an account and false otherwise
 function isExistingUser(loginString)
 {    
-    var jsonPayload = '{"login" : "' + loginString + '"}';
+	var jsonPayload = '{"login" : "' + loginString + '"}';
 	var url = apiUrl + '/isExistingUser' + dotPhp;
-    var userStatus;
+	var userStatus;
 
 	// http POST : Attempt to send json with login data to server.
 	var xhr = new XMLHttpRequest();
@@ -337,7 +337,7 @@ function isExistingUser(loginString)
 	{
 		xhr.send(jsonPayload);
 
-	    // Receive json response.
+		// Receive json response.
 		var jsonObject = JSON.parse( xhr.responseText );
 		userStatus = jsonObject.userStatus;
 		
@@ -350,7 +350,7 @@ function isExistingUser(loginString)
 	}
 	catch(err)
 	{
-        // *** add error handler ***
+		// *** add error handler ***
 	    return false;
 	}
 }
@@ -372,7 +372,7 @@ function addUser()
     if(isExistingUser(login))
     {
 		loginUser();
-        return;
+		return;
     }
 
 	// login-data json that interfaces with php / api
