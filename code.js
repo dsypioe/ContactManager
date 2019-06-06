@@ -1,6 +1,7 @@
 /*
 A note from Jonas:    
     All comments about things that need to be changed will begin and end with three asterisks ***.
+    The whitespace is inconsistent from using different text editors and needs to be corrected.
 */
 
 var apiUrl  = "http://contactmanager.online/php";
