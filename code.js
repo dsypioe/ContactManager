@@ -74,14 +74,14 @@ function loginUser()
 	// login-data json that interfaces with php / api
 	var jsonPayload = '{"login" : "' + login + '", "password" : "' + password + '"}';
 	var url = apiUrl + '/loginUser' + dotPhp;
-    var sessionUrl = apiUrl + '/writeSession' + dotPhp;
-
-    // Empty inputs are invalid.
-    if(login === "" || password === "")
-    {
-        document.getElementById("invalidAccount").innerHTML = "*Invalid Username or Password"; 
-        return false;
-    }
+	var sessionUrl = apiUrl + '/writeSession' + dotPhp;
+	
+	// Empty inputs are invalid.
+	if(login === "" || password === "")
+	{
+		document.getElementById("invalidAccount").innerHTML = "*Invalid Username or Password"; 
+		return false;
+	}
 
 	// http POST : Attempt to send json with login data to server.
 	var xhr = new XMLHttpRequest();
@@ -91,7 +91,7 @@ function loginUser()
 	{
 		xhr.send(jsonPayload);
 
-	    // Receive json response, including autoincrement user key (id) value.	
+		// Receive json response, including autoincrement user key (id) value.	
 		var jsonObject = JSON.parse( xhr.responseText );
 		userId = jsonObject.id;
 
@@ -105,17 +105,17 @@ function loginUser()
 		document.getElementById("loginNameText").value = "";
 		document.getElementById("loginPasswordText").value = "";
     
-        // Save the session data (id and login) so it can be retrieved when home is loaded.
-        writeSession();		
+		// Save the session data (id and login) so it can be retrieved when home is loaded.
+		writeSession();		
 		
 		// Load home page.
 		window.location.href = rootUrl + '/home.html', true;
 		
-	    return true;	
+		return true;	
 	}
 	catch(err)
 	{
-	    return false;
+		return false;
 	}
 }
 
@@ -136,7 +136,7 @@ function writeSession()
 	}
 	catch(err)
 	{
-	    // *** add error handler ***
+		// *** add error handler ***
 	}
 }
 
@@ -154,7 +154,7 @@ function readSession()
 	{
 		xhr.send(jsonPayload); // *** This doesn't need to be sent, because the php is just sending the session variable values in a json. ***
 
-	    // Receive json response, including login and autoincrement user key (id) value.	
+		// Receive json response, including login and autoincrement user key (id) value.	
 		var jsonObject = JSON.parse( xhr.responseText );
 		userId = jsonObject.id;
 		login = jsonObject.login;		
@@ -167,13 +167,13 @@ function readSession()
 
 function updateContact()
 {
-    // Get user input values.
-    var id = contactId;
-    var first = document.getElementById("newFirstText").value.trim();
-    var last = document.getElementById("newLastText").value.trim();
-    var email = document.getElementById("newEmailText").value.trim();
-    var phone = document.getElementById("newPhoneText").value.trim();
-    var address = document.getElementById("newAddressText").value.trim();
+	// Get user input values.
+	var id = contactId;
+	var first = document.getElementById("newFirstText").value.trim();
+	var last = document.getElementById("newLastText").value.trim();
+	var email = document.getElementById("newEmailText").value.trim();
+	var phone = document.getElementById("newPhoneText").value.trim();
+	var address = document.getElementById("newAddressText").value.trim();
 	
 	// truncate phone number string if it is longer than 13 characters
     while(phone.length > 13)
